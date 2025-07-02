@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from typing import List, Annotated
 from sqlalchemy.orm import Session
-from auth import auth
+from auth import controller as auth
 from database.core import get_db, Base, engine
 from fastapi import status
 

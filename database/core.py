@@ -28,4 +28,4 @@ def get_db():
         db.close()
 
 
-DbSession = Annotated(Session, Depends(get_db))
+DbSession = Annotated[Session, Depends(get_db)]

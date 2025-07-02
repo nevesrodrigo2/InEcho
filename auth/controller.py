@@ -5,7 +5,7 @@ from starlette import status
 from . import service
 from . import model
 from database.core import DbSession
-from ..rate_limiting import limiter
+from rate_limiting import limiter
 
 router = APIRouter(
     prefix='/auth',

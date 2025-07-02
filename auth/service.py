@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 import os
 
 from entities.user import User
-import model
+from . import model
 
 
 router = APIRouter(
