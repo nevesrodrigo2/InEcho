@@ -11,3 +11,6 @@ python-jose[cryptography]
 psycopg2-binary
 pydantic[email]
 python-multipart
+requests
+# musicbrainzngs  commented out due to functionality issues
+discogs-client
