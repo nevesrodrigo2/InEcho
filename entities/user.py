@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from database.core import Base
 
 
@@ -13,6 +14,8 @@ class User(Base):
     last_name = Column(String, nullable=True)
     created_at = Column(Integer, default=lambda: int(
         datetime.now(timezone.utc).timestamp()))
+    ratings = relationship("Rating", back_populates="user",
+                           cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, email='{self.email}', email='{self.email}')>"
