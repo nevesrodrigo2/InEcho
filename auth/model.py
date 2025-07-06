@@ -15,9 +15,4 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    user_id: UUID | None = None
-
-    def get_uuid(self) -> UUID | None:
-        if self.user_id:
-            return UUID(self.user_id)
-        return None
+    user_id: int | None = None

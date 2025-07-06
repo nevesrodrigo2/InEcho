@@ -41,6 +41,7 @@ def authenticate_user(email: str, password: str, db: Session) -> 'User | None':
     user = db.query(User).filter(User.email == email).first()
     if not user or not verify_password(password, user.hashed_password):
         return False
+    return user
 
 
 def create_access_token(email: str, user_id: int, expires_delta: timedelta):
@@ -71,6 +72,8 @@ def register_user(user: model.RegisterUserRequest, db: Session):
         )
         db.add(created_user_model)
         db.commit()
+
+        logging.info('User: {user.email} registered successfully')
     except Exception as e:
         logging.error(f'Error creating user: {e}')
         raise
@@ -90,12 +93,18 @@ def login_for_access_token(
 
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
-        return
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     token = create_access_token(
         email=user.email,
         user_id=user.id,
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
+
+    logging.info(f'User: {user.email} logged in successfully')
 
     return model.Token(access_token=token, token_type='bearer')
