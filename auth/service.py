@@ -1,9 +1,7 @@
 from datetime import datetime, timedelta
 import logging
 from typing import Annotated
-
 from fastapi import Depends, HTTPException, status, APIRouter
-
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from jose import JWTError, jwt
