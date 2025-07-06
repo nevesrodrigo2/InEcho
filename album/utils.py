@@ -1,20 +1,22 @@
 from fastapi import HTTPException
 import dotenv
 import os
-from .model import AlbumInfoCreateRequest
-import re
-from messages.error_messages import ALBUM_NOT_FOUND
 import discogs_client  # API
+from album.model import AlbumInfoCreateRequest
 import logging
 
 dotenv.load_dotenv()
+APP_NAME = os.getenv("APP_NAME")
+APP_VERSION = os.getenv("APP_VERSION")
+
 
 # Initialize Discogs client
 DISCOGS_TOKEN = os.getenv("DISCOGS_TOKEN")
 if not DISCOGS_TOKEN:
     raise RuntimeError("Missing DISCOGS_TOKEN in environment variables")
 
-client = discogs_client.Client("InEcho/1.0", user_token=DISCOGS_TOKEN)
+client = discogs_client.Client(
+    APP_NAME+"/"+APP_VERSION, user_token=DISCOGS_TOKEN)
 
 
 def get_album_info(artist_name: str, album_name: str) -> AlbumInfoCreateRequest:
@@ -29,7 +31,6 @@ def get_album_info(artist_name: str, album_name: str) -> AlbumInfoCreateRequest:
 
         release = results[0].master.main_release
 
-        # set title to everything after the first ' - '
         title = release.title
         artist = ', '.join(a.name for a in release.artists)
         release_date = str(release.year) if release.year else 'Unknown'
